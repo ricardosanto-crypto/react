@@ -1,18 +1,27 @@
 package br.com.ricvon.imageliteapi.application.users;
 
-import br.com.ricvon.imageliteapi.domain.service.UserService;    
+import br.com.ricvon.imageliteapi.domain.service.UserService;
+import br.com.ricvon.imageliteapi.application.jwt.JwtService;
 import br.com.ricvon.imageliteapi.domain.AccessToken;
 import br.com.ricvon.imageliteapi.infra.repository.UserRepository;  
+import br.com.ricvon.imageliteapi.domain.entity.User;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import br.com.ricvon.imageliteapi.domain.entity.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import br.com.ricvon.imageliteapi.domain.exception.DuplicatedTupleException;
+
 
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Override
     public User getByEmail(String email) {
@@ -24,19 +33,28 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         var possibleUser = getByEmail(user.getEmail());
         if (possibleUser != null) {
-            throw new RuntimeException("User already exists");
+            throw new DuplicatedTupleException("User already exists");
         }   
+        encodePassword(user);
         return userRepository.save(user);
     }
 
     @Override
     public AccessToken authenticate(String email, String password) {
         User user = getByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            // Generate access token (for simplicity, using a random UUID here)
-            String token = java.util.UUID.randomUUID().toString();
-            return new AccessToken(token);
+        if (user == null) {
+            return null;
         }
-        throw new RuntimeException("Invalid email or password");
+        
+        boolean matches = passwordEncoder.matches(password, user.getPassword());
+        if (matches) {
+            return jwtService.generateToken(user);
+        }
+        return null;
+    }
+
+    private void encodePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 }
