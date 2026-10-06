@@ -7,6 +7,8 @@ import br.com.ricvon.imageliteapi.domain.entity.User;
 
 @Service 
 public class JwtService{
+
     public AccessToken generateToken(User user) {
         return new AccessToken("");
+    }
 }
