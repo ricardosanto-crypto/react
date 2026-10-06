@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.StringUtils;
+import br.com.ricvon.imageliteapi.domain.entity.User;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ import static br.com.ricvon.imageliteapi.infra.repository.specs.ImageSpecs.*;
 import static org.springframework.data.jpa.domain.Specification.*;
 
 public interface UserRepository extends JpaRepository<User, String> {
+
+    User findByEmail(String email);
     
 }

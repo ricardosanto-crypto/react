@@ -1,8 +1,10 @@
 package br.com.ricvon.imageliteapi.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
-@AllArgsContructor
+@AllArgsConstructor
 public class AccessToken {
     private String accessToken;
 }

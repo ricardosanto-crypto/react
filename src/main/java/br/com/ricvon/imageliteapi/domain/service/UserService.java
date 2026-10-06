@@ -1,6 +1,6 @@
 package br.com.ricvon.imageliteapi.domain.service;
 
-import br.com.ricvon.imageliteapi.domain.entity.Image;
+import br.com.ricvon.imageliteapi.domain.entity.User;
 import br.com.ricvon.imageliteapi.domain.enums.ImageExtension;
 import br.com.ricvon.imageliteapi.domain.AccessToken;
 import java.util.List;
