@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "auth_user")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Data 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
