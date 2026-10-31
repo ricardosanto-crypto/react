@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/v1/users")
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class UserController {
     
     private final UserService userService;
@@ -36,16 +36,13 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity authenticate(@RequestBody CredentialsDTO credentials) {
-        try {
-            var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());
-            if (token == null){
+          var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());   
+
+            //var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());
+          if (token == null){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  
-            }
-            
-       } catch (DuplicatedTupleException e) {
-            Map<String, String> jsonResultado = Map.of("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-       } 
-       return ResponseEntity.ok(token);
+          }
+
+          return ResponseEntity.ok(token);
     }
 }
