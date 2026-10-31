@@ -39,13 +39,13 @@ public class UserController {
         try {
             var token = userService.authenticate(credentials.getEmail(), credentials.getPassword());
             if (token == null){
-                return ResponseEntity.status(HttpStatus.OK).build();  
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  
             }
             
        } catch (DuplicatedTupleException e) {
             Map<String, String> jsonResultado = Map.of("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
        } 
-       return ResponseEntity.ok(token)
+       return ResponseEntity.ok(token);
     }
 }
